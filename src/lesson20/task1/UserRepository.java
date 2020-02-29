@@ -1,9 +1,12 @@
-package lesson9.homeWorks;
+package lesson20.task1;
+
+import lesson20.task1.exception.BadRequestException;
+import lesson20.task1.exception.InternalServerException;
+import lesson20.task1.exception.UserNotFoundException;
 
 public class UserRepository {
 
     private User[] users = new User[10];
-
 
     public UserRepository(User[] users) {
 
@@ -98,22 +101,16 @@ public class UserRepository {
     }
 
 
-    public User save(User user) {
+    public User save(User user) throws Exception {
 
         if (user == null)
-            return null;
+            throw new BadRequestException("Can't save null user");
 
-        if (findById(user.getId()) != null)
-            return null;
-
-        int countPlaced = 0;
-        for (User us : users) {
-            if (us != null) {
-                countPlaced++;
-            }
-        }
-        if (countPlaced > 9) {
-            return null;
+        try {
+            findById(user.getId());
+            throw new BadRequestException("User with id: " + user.getId() + " already exist");
+        } catch (UserNotFoundException e) {
+            System.out.println("User with id: " + user.getId() + " not found. Will be saved.");
         }
 
         int index = 0;
@@ -125,49 +122,50 @@ public class UserRepository {
             index++;
 
         }
-        return user;
+        throw new InternalServerException("Not enough space to save user with id: " + user.getId());
 
     }
 
-    public User findById(long id) {
+    public User findById(long id) throws UserNotFoundException {
         for (User user : users) {
             if (user != null && id == user.getId()) {
                 return user;
             }
         }
-        return null;
+        throw new UserNotFoundException("User with id: " + id + "not found");
 
     }
 
-    public User update(User user) {
 
+    public User update(User user) throws Exception {
         if (user == null)
-            return null;
-
-        if (findById(user.getId()) == null)
-            return null;
-
+            throw new BadRequestException("Can't update null user");
+        findById(user.getId());
         int index = 0;
         for (User us : users) {
-            if (us == findById(user.getId())) {
+            if (us != null && us.getId() == user.getId()) {
                 users[index] = user;
                 return users[index];
             }
             index++;
-
         }
-        return null;
-
-
+        throw new InternalServerException("Unexpected error");
     }
 
-    public void delete(long id) {
-        for (int a = 0; a < users.length; a++) {
-            if (users[a] != null && id == users[a].getId()) {
-                users[a] = null;
-            }
 
+    public void delete(long id) throws Exception{
+
+        findById(id);
+
+        int index = 0;
+        for (User us : users){
+            if (us.getId()==id){
+                users[index] = null;
+                break;
+            }
+            index++;
         }
+
     }
 
 

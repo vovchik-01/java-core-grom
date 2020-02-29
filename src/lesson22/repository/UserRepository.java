@@ -1,22 +1,21 @@
-package lesson9.homeWorks;
+package lesson22.repository;
 
 public class UserRepository {
 
-    private User[] users = new User[10];
+    private static User[] users = new User[10];
 
 
-    public UserRepository(User[] users) {
+    public UserRepository() {
 
-        this.users = users;
     }
 
 
-    public User[] getUsers() {
+    public static User[] getUsers() {
 
         return users;
     }
 
-    public int countUsers() {
+    public static int countUsers() {
         int countUsers = 0;
         for (User user : users) {
             if (user != null)
@@ -25,7 +24,7 @@ public class UserRepository {
         return countUsers;
     }
 
-    public String[] getUserNames() {
+    public static String[] getUserNames() {
         String[] massOfNames = new String[users.length];
         int index = 0;
 
@@ -39,7 +38,7 @@ public class UserRepository {
     }
 
 
-    public long[] getUserIds() {
+    public static long[] getUserIds() {
         long[] massOfIds = new long[countUsers()];
         int index = 0;
         for (User user : users) {
@@ -53,7 +52,7 @@ public class UserRepository {
     }
 
 
-    public String getUserNameById(long id) {
+    public static String getUserNameById(long id) {
         String name = "";
         int count = 0;
         for (User user : users) {
@@ -67,7 +66,7 @@ public class UserRepository {
         return name;
     }
 
-    public User getUserByName(String name) {
+    public static User getUserByName(String name) {
         for (User user : users) {
             if (user != null && name.equals(user.getName())) {
                 return user;
@@ -77,7 +76,7 @@ public class UserRepository {
         return null;
     }
 
-    public User getUserById(long id) {
+    public static User getUserById(long id) {
         for (User user : users) {
             if (user != null && id == user.getId()) {
                 return user;
@@ -87,7 +86,7 @@ public class UserRepository {
 
     }
 
-    public User getUserBySessionId(String sessionId) {
+    public static User getUserBySessionId(String sessionId) {
         for (User user : users) {
             if (user != null && sessionId.equals(user.getSessionId())) {
                 return user;
@@ -98,7 +97,7 @@ public class UserRepository {
     }
 
 
-    public User save(User user) {
+    public static User save(User user) {
 
         if (user == null)
             return null;
@@ -129,7 +128,7 @@ public class UserRepository {
 
     }
 
-    public User findById(long id) {
+    public static User findById(long id) {
         for (User user : users) {
             if (user != null && id == user.getId()) {
                 return user;
@@ -139,7 +138,7 @@ public class UserRepository {
 
     }
 
-    public User update(User user) {
+    public static User update(User user) {
 
         if (user == null)
             return null;
@@ -161,7 +160,7 @@ public class UserRepository {
 
     }
 
-    public void delete(long id) {
+    public static void delete(long id) {
         for (int a = 0; a < users.length; a++) {
             if (users[a] != null && id == users[a].getId()) {
                 users[a] = null;
